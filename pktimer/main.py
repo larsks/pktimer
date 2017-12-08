@@ -62,6 +62,7 @@ class TimerCanvas(tk.Canvas):
 class TimerApp(tk.Tk):
     default_width = 100
     default_height = 100
+    tock_time = 100
 
     def __init__(self,
                  seconds=None,
@@ -94,6 +95,8 @@ class TimerApp(tk.Tk):
 
         self.bind('<Button-1>', self.toggle)
         self.bind('<Button-3>', self.reset)
+
+        self.tock()
 
     def on_delete(self):
         LOG.debug('deleting window')
@@ -155,6 +158,18 @@ class TimerApp(tk.Tk):
         LOG.info('reset timer to %d seconds', self.seconds)
         self.current = self.seconds
         self.canvas.update(self.current)
+
+    def tock(self):
+        '''Force an event check once in a while.
+
+        If the timer window isn't active, the application may not
+        respond to a ^C because it won't be check for events.  This
+        forces a check every 50ms.
+
+        See https://stackoverflow.com/a/13784297/147356
+        '''
+
+        self.after(self.tock_time, self.tock)
 
 
 def int_or_inf(value):
