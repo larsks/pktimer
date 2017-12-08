@@ -80,6 +80,10 @@ class TimerApp(tk.Tk):
         self.interval = int(coalesce(interval, 0))
         self.action = action
 
+        LOG.debug('seconds = %d', self.seconds)
+        LOG.debug('repeat = %d', self.repeat)
+        LOG.debug('action = %s', self.action)
+
         self.quit = False
         self.running = False
 
@@ -145,8 +149,9 @@ class TimerApp(tk.Tk):
 
             if self.repeat > 0:
                 self.repeat -= 1
+                LOG.debug('repeat = %d', self.repeat)
 
-            if self.repeat > 0 or self.repeat == 1:
+            if self.repeat > 0 or self.repeat == -1:
                 self.reset()
                 self.start_timer()
         else:
